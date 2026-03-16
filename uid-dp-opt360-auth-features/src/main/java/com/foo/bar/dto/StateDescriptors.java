@@ -126,5 +126,28 @@ public class StateDescriptors {
     );
     public static ValueStateDescriptor<FeatureAuthModalitySwitch.ModalityState> featureAuthModalitySwitchDescriptor = new ValueStateDescriptor<>(
             "featureAuthModalitySwitchDescriptor", TypeInformation.of(new TypeHint<FeatureAuthModalitySwitch.ModalityState>() {})
+    public static ValueStateDescriptor<FeatureBioMatchScoreTrend.ScoreState> featureBioMatchScoreTrendDescriptor = new ValueStateDescriptor<>(
+            "featureBioMatchScoreTrendDescriptor", TypeInformation.of(new TypeHint<FeatureBioMatchScoreTrend.ScoreState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioLivenessFailureStreak.StreakState> featureBioLivenessFailureStreakDescriptor = new ValueStateDescriptor<>(
+            "featureBioLivenessFailureStreakDescriptor", TypeInformation.of(new TypeHint<FeatureBioLivenessFailureStreak.StreakState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioResponseTimeAnomaly.TimeState> featureBioResponseTimeAnomalyDescriptor = new ValueStateDescriptor<>(
+            "featureBioResponseTimeAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioResponseTimeAnomaly.TimeState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioDeepPrintAnomaly.DeepPrintState> featureBioDeepPrintAnomalyDescriptor = new ValueStateDescriptor<>(
+            "featureBioDeepPrintAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioDeepPrintAnomaly.DeepPrintState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioFaceLivenessScoreDecline.FaceScoreState> featureBioFaceLivenessScoreDeclineDescriptor = new ValueStateDescriptor<>(
+            "featureBioFaceLivenessScoreDeclineDescriptor", TypeInformation.of(new TypeHint<FeatureBioFaceLivenessScoreDecline.FaceScoreState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioModalityConcentration.ModalityState> featureBioModalityConcentrationDescriptor = new ValueStateDescriptor<>(
+            "featureBioModalityConcentrationDescriptor", TypeInformation.of(new TypeHint<FeatureBioModalityConcentration.ModalityState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioImageSizeAnomaly.SizeState> featureBioImageSizeAnomalyDescriptor = new ValueStateDescriptor<>(
+            "featureBioImageSizeAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioImageSizeAnomaly.SizeState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioProbeMinutiaeAnomaly.MinutiaeState> featureBioProbeMinutiaeAnomalyDescriptor = new ValueStateDescriptor<>(
+            "featureBioProbeMinutiaeAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioProbeMinutiaeAnomaly.MinutiaeState>() {})
     );
 }
