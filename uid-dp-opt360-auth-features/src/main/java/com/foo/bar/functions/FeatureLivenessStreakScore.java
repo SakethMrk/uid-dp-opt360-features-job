@@ -1,5 +1,6 @@
 package com.foo.bar.functions;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foo.bar.dto.InputMessageTxn;
 import com.foo.bar.dto.OutMessage;
 import com.foo.bar.dto.StateDescriptors;
@@ -11,11 +12,15 @@ import org.apache.flink.util.Collector;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class FeatureLivenessStreakScore extends KeyedProcessFunction<String, InputMessageTxn, OutMessage> {
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public static class StreakState{
         public int streakCount = 0;
@@ -71,7 +76,7 @@ public class FeatureLivenessStreakScore extends KeyedProcessFunction<String, Inp
         }
 
     }
-    private void emitFeature(String key, StreakState streakState,Collector<OutMessage> out){
+    private void emitFeature(String key, StreakState streakState, Collector<OutMessage> out){
         OutMessage feature = new OutMessage();
         feature.setOptId(key);
         feature.setFeature("auth_liveness_failure_streak_live_v1");
@@ -80,28 +85,20 @@ public class FeatureLivenessStreakScore extends KeyedProcessFunction<String, Inp
         feature.setWindowEnd(streakState.lastFailureTimestamp);
         feature.setLastUpdatedTimestamp(System.currentTimeMillis());
 
-        String firstAuthCode = streakState.firstFailureAuthCode;
-        long firstFailureTimestamp = streakState.firstFailureTimestamp;
-        String lastFailureAuthCode = streakState.lastFailureAuthCode;
-        long lastFailureTimestamp = streakState.lastFailureTimestamp;
-        String modelId = streakState.modelId;
+        Map<String, Object> commentsMap = new LinkedHashMap<>();
+        commentsMap.put("auth_code_initial", streakState.firstFailureAuthCode);
+        commentsMap.put("auth_code_initial_timestamp", timestampToLocalDateTime(streakState.firstFailureTimestamp).toString());
+        commentsMap.put("auth_code_final", streakState.lastFailureAuthCode);
+        commentsMap.put("auth_code_final_timestamp", timestampToLocalDateTime(streakState.lastFailureTimestamp).toString());
+        commentsMap.put("device_codes", new ArrayList<>(streakState.deviceCodes));
+        commentsMap.put("model_id", streakState.modelId);
+        commentsMap.put("streak_count", streakState.streakCount);
 
-        StringBuilder deviceCodesList = new StringBuilder();
-        for(String str: streakState.deviceCodes){
-            if(deviceCodesList.length()>0){
-                deviceCodesList.append(", ");
-            }
-            deviceCodesList.append(str);
+        try {
+            feature.setComments(objectMapper.writeValueAsString(commentsMap));
+        } catch (Exception e) {
+            feature.setComments(commentsMap.toString());
         }
-        StringBuilder sb = new StringBuilder();
-              sb.append(" auth_code_initial:").append(firstAuthCode)
-                .append(",\nauth_code_initial_timestamp:").append(timestampToLocalDateTime(firstFailureTimestamp))
-                .append(",\nauth_code_final:").append(lastFailureAuthCode)
-                .append(",\nauth_code_final_timestamp:").append(timestampToLocalDateTime(lastFailureTimestamp))
-                .append(",\ndevice_codes:").append(deviceCodesList)
-                .append(",\nmodel_id:").append(modelId);
-
-        feature.setComments(sb.toString());
         feature.setSkipComments(true);
         out.collect(feature);
     }

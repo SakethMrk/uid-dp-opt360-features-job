@@ -103,10 +103,60 @@ public class FlinkPipeline {
                 .keyBy(InputMessageTxn::getOptId)
                 .process(new FeatureLivenessStreakScore());
 
+        // --- NEW TXN FEATURES STREAMS ---
+        DataStream<OutMessage> fAuthFailureRate = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFailureRate());
+        DataStream<OutMessage> fAuthOtpFallback = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthOtpFallbackRatio());
+        DataStream<OutMessage> fAuthSuccessNoBio = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthSuccessWithoutBio());
+        DataStream<OutMessage> fAuthVelocitySpike = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthVelocitySpike());
+        DataStream<OutMessage> fAuthFailureBurst = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFailureBurst());
+        DataStream<OutMessage> fAuthGeoDrift = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthGeoDrift());
+        DataStream<OutMessage> fAuthLocResMismatch = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthLocationResidentMismatch());
+        DataStream<OutMessage> fAuthDevDiversity = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthDeviceDiversity());
+        DataStream<OutMessage> fAuthModDiversity = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthModelDiversity());
+        DataStream<OutMessage> fAuthRdSoftChange = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthRdSoftwareChange());
+        DataStream<OutMessage> fAuthDevProvSwitch = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthDeviceProviderSwitch());
+        DataStream<OutMessage> fAuthFinScoreDec = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFingerScoreDecline());
+        DataStream<OutMessage> fAuthFaceScoreDec = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFaceScoreDecline());
+        DataStream<OutMessage> fAuthFmrCountAnom = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFmrCountAnomaly());
+        DataStream<OutMessage> fAuthPidSizeAnom = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthPidSizeAnomaly());
+        DataStream<OutMessage> fAuthTimeEntropy = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthTimeEntropy());
+        DataStream<OutMessage> fAuthWeekendAnom = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthWeekendAnomaly());
+        DataStream<OutMessage> fAuthAuaSaDiv = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthAuaSaDiversity());
+        DataStream<OutMessage> fAuthEnrolHammer = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthEnrolmentHammering());
+        DataStream<OutMessage> fAuthDurOutlier = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthDurationOutlier());
+        DataStream<OutMessage> fAuthSrvConcent = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthServerConcentration());
+        DataStream<OutMessage> fAuthCertExpiry = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthCertExpiry());
+        DataStream<OutMessage> fAuthErrHotspot = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthErrorCodeHotspot());
+        DataStream<OutMessage> fAuthModSwitch = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthModalitySwitch());
+
         DataStream<OutMessage> unionStream = countsStreamHr1
                 .union(gapStream1)
                 .union(retryStream1)
-                .union(livenessStreakStream);
+                .union(livenessStreakStream)
+                .union(fAuthFailureRate)
+                .union(fAuthOtpFallback)
+                .union(fAuthSuccessNoBio)
+                .union(fAuthVelocitySpike)
+                .union(fAuthFailureBurst)
+                .union(fAuthGeoDrift)
+                .union(fAuthLocResMismatch)
+                .union(fAuthDevDiversity)
+                .union(fAuthModDiversity)
+                .union(fAuthRdSoftChange)
+                .union(fAuthDevProvSwitch)
+                .union(fAuthFinScoreDec)
+                .union(fAuthFaceScoreDec)
+                .union(fAuthFmrCountAnom)
+                .union(fAuthPidSizeAnom)
+                .union(fAuthTimeEntropy)
+                .union(fAuthWeekendAnom)
+                .union(fAuthAuaSaDiv)
+                .union(fAuthEnrolHammer)
+                .union(fAuthDurOutlier)
+                .union(fAuthSrvConcent)
+                .union(fAuthCertExpiry)
+                .union(fAuthErrHotspot)
+                .union(fAuthModSwitch);
 
         DataStream<OutMessage> enrichedStream = unionStream.map(new CommentsMapper());
         //DataStream<Row> rowStreamDevice = deviceChangeStream1.map(new RowMapperDevice());

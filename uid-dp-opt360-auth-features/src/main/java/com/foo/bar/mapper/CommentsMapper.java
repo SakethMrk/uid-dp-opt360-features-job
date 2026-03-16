@@ -1,15 +1,19 @@
 package com.foo.bar.mapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foo.bar.dto.OutMessage;
 import com.foo.bar.pipeline.Driver;
 import org.apache.flink.api.common.functions.MapFunction;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class CommentsMapper implements MapFunction<OutMessage, OutMessage> {
 
     private static final int FEATURE_VERSION = 1;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public OutMessage map(OutMessage value) {
@@ -25,23 +29,26 @@ public class CommentsMapper implements MapFunction<OutMessage, OutMessage> {
         value.setFeatureId(featureId.toString());
         value.setFeatureVersion(String.valueOf(FEATURE_VERSION));
 
-
         long timestampMillis = value.getWindowEnd() > 0 ? value.getWindowEnd() : value.getLastUpdatedTimestamp();
         value.setTimestampFormatted(timestampToLocalDateTime(timestampMillis).toString());
 
         if (!value.isSkipComments() && (value.getComments() == null || value.getComments().isEmpty())) {
-            StringBuilder sb = new StringBuilder();
+            Map<String, Object> map = new LinkedHashMap<>();
             if (value.getWindowStart() > 0 && value.getWindowEnd() > 0) {
-                sb.append("Window: [")
-                        .append(timestampToLocalDateTime(value.getWindowStart()))
-                        .append(" - ")
-                        .append(timestampToLocalDateTime(value.getWindowEnd()))
-                        .append("]");
+                map.put("window_start", timestampToLocalDateTime(value.getWindowStart()).toString());
+                map.put("window_end", timestampToLocalDateTime(value.getWindowEnd()).toString());
             }
             if (value.getLastUpdatedTimestamp() > 0) {
-                sb.append(", LastUpdated: ").append(timestampToLocalDateTime(value.getLastUpdatedTimestamp()));
+                map.put("last_updated", timestampToLocalDateTime(value.getLastUpdatedTimestamp()).toString());
             }
-            value.setComments(sb.toString());
+            
+            if (!map.isEmpty()) {
+                try {
+                    value.setComments(objectMapper.writeValueAsString(map));
+                } catch (Exception e) {
+                    value.setComments(map.toString());
+                }
+            }
         }
 
         return value;

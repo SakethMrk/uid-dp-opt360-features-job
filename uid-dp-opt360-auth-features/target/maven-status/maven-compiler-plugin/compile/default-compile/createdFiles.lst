@@ -1,0 +1,6 @@
+com\foo\bar\dto\OutMessage$OutMessageDeviceChange.class
+com\foo\bar\functions\FeatureAuthSuccessWithoutBio$SuccessState.class
+com\foo\bar\mapper\RowMapper.class
+com\foo\bar\dto\OutMessage.class
+com\foo\bar\dto\InputMessageTxn.class
+com\foo\bar\functions\FeatureAuthSuccessWithoutBio.class

@@ -1,0 +1,132 @@
+# Operator 360 Features - Explained for a 5-Year-Old! 🎈
+
+> **What is this?** 
+> Imagine you have a big team of helpers at a toy factory. Some helpers are great, but some might try to break the rules, sneak in their friends, or use broken tools. These 24 "Features" are like invisible security guards watching the helpers (Operators) to make sure everyone is playing fair!
+
+---
+
+## 1. 🤖 "You're Moving Too Fast to be Human!" (Bot Catchers)
+
+**1. `auth_velocity_spike_v1` (The Turbo Checker)**
+- **What it does:** If an Operator tries to do 15 jobs in just 60 seconds.
+- **Why we care:** Normal people can't type and scan fingerprints that fast! It means a robot (computer program) is probably doing the work for them.
+
+**2. `auth_failure_burst_v1` (The Oops-Oops-Oops Checker)**
+- **What it does:** If an Operator messes up and fails 8 times in just 30 seconds.
+- **Why we care:** If you fail that fast, you aren't paying attention, or worst, a robot is guessing passwords super fast!
+
+**3. `auth_modality_switch_v1` (The Panic Switcher)**
+- **What it does:** If an Operator keeps switching back and forth between Fingerprint, Face, and Password very quickly.
+- **Why we care:** When bad guys steal a phone, they panic and try every single way to unlock it.
+
+---
+
+## 2. 📱 "Your Tools Look Weird!" (Device Detectives)
+
+**4. `auth_device_diversity_v1` (The Device Juggler)**
+- **What it does:** If an Operator uses 4 or more different devices (like a phone, tablet, and 2 laptops) in just 2 hours.
+- **Why we care:** You only have two hands! If you are using 4 devices at once, you might have shared your login with bad guys.
+
+**5. `auth_model_diversity_v1` (The Phone Faker)**
+- **What it does:** If an Operator pretends to use 3 different types of phone models in 4 hours.
+- **Why we care:** Software hackers use fake "virtual" phones. They often forget to use the same fake phone model all day.
+
+**6. `auth_device_provider_switch_v1` (Brand Hopper)**
+- **What it does:** If an Operator unplugs their fingerprint scanner brand, and suddenly plugs in a completely different scanner brand in the same shift.
+- **Why we care:** Real workers stick to the equipment they were given. Bouncing around brands means someone is testing exploits.
+
+**7. `auth_rd_software_change_v1` (The Sneaky Updater)**
+- **What it does:** If the software version on the Operator's scanner suddenly changes in the middle of a shift.
+- **Why we care:** Hackers try to downgrade software to older, broken versions to bypass security rules. 
+
+---
+
+## 3. 🗺️ "You Can't Be in Two Places!" (Location Magic)
+
+**8. `auth_geo_drift_v1` (The Teleporter)**
+- **What it does:** If an Operator does a job in New York, and 10 minutes later does a job in California.
+- **Why we care:** Nobody can run that fast! They are using a fake GPS or a VPN to hide where they really are.
+
+**9. `auth_location_resident_mismatch_v1` (The Far Away Friend)**
+- **What it does:** If an Operator in Texas keeps doing jobs for people whose addresses are entirely in Alaska.
+- **Why we care:** It's suspicious if a worker *only* gets customers who flew 3,000 miles just to see them.
+
+---
+
+## 4. 📉 "Why is the Quality Getting Worse?" (Spoofing Detectives)
+
+**10. `auth_finger_score_decline_v1` (The Melting Fingerprint)**
+- **What it does:** It looks to see if the fingerprint "score" keeps getting worse and worse over 10 tries.
+- **Why we care:** If a bad guy is using a fake "gummy" finger made of glue, it slowly melts and gets smudged every time they press it!
+
+**11. `auth_face_score_decline_v1` (The Wrinkling Photo)**
+- **What it does:** It looks to see if the face picture quality drops steadily over 10 tries.
+- **Why we care:** Similar to the melt! If they print a photo of a face, it gets wrinkled or glare from the lights makes it look worse over time.
+
+**12. `auth_fmr_count_anomaly_v1` (The Shifting Lines)**
+- **What it does:** Maps the tiny lines (minutiae) on your fingerprint. If the lines change wildly from one try to the next.
+- **Why we care:** You can't change your fingerprint! If the lines change completely, it's a completely different person entirely or a fake injection.
+
+**13. `auth_pid_size_anomaly_v1` (The Heavy Backpack)**
+- **What it does:** Checks if the data "backpack" the Operator sends is suddenly 10 times bigger than normal.
+- **Why we care:** Hackers hide giant viruses or fake data inside these "backpacks."
+
+---
+
+## 5. 🛑 "You're Failing Too Much!" (Rule Breakers)
+
+**14. `auth_failure_rate_rolling_v1` (The Grade-F Student)**
+- **What it does:** If an Operator fails 70% of everything they do.
+- **Why we care:** If you fail that much, your machine is terribly broken, or you are a hacker trying random stolen passwords hoping one works.
+
+**15. `auth_otp_fallback_ratio_v1` (The Lazy Login)**
+- **What it does:** If an Operator skips fingerprints and faces and *only* uses secret text codes (OTP) more than half the time.
+- **Why we care:** Text messages are the easiest thing for hackers to steal. We want them to use biometrics safely!
+
+**16. `auth_success_without_bio_ratio_v1` (The Ghost Customer)**
+- **What it does:** If an Operator manages to succeed on 40% of their jobs without taking a single picture or fingerprint.
+- **Why we care:** We need proof a real human was standing there. Succeeding without proof usually means they found a loophole.
+
+---
+
+## 6. ⏰ "Why are you working now?" (Time Detectives)
+
+**17. `auth_time_entropy_bits_v1` (The Metronome Robot)**
+- **What it does:** People work messy. We take breaks, we sneeze. This checks if jobs are coming in at *perfectly exact* intervals, like exactly every 5.0 seconds. 
+- **Why we care:** Only a robot computer program operates with perfect mathematical timing. 
+
+**18. `auth_weekend_anomaly_v1` (The Weekend Warrior)**
+- **What it does:** If an Operator does 0 work all week, and then suddenly does 5,000 jobs on Sunday at 3 AM.
+- **Why we care:** Bad guys love the weekends because the good guys are asleep!
+
+---
+
+## 7. 🏢 "Stop Bothering Everyone!" (Spam Checkers)
+
+**19. `auth_aua_sa_diversity_v1` (The Busybody)**
+- **What it does:** If an Operator tries to talk to 9 different departments or companies very rapidly.
+- **Why we care:** Most workers only talk to their own department. A hacker tries to talk to every department to see which one leaves a door unlocked.
+
+**20. `auth_enrolment_hammering_v1` (The Application Spammer)**
+- **What it does:** If an Operator submits 5 or more new Enrollments in just 1 hour.
+- **Why we care:** Registering someone new takes a long time. Doing 5 in an hour means they are sending out fake, copy-pasted people.
+
+---
+
+## 8. 🚨 "Uh Oh, the System is Sick!" (Maintenance Trackers)
+
+**21. `auth_cert_expiry_alert_v1` (The Expired Milk Alert)**
+- **What it does:** Shouts "Hey!" if a security certificate is going to expire in 7 days or less.
+- **Why we care:** If it expires, the whole toy factory shuts down! We must replace it before it breaks.
+
+**22. `auth_duration_outlier_v1` (The Slowpoke)**
+- **What it does:** If a task usually takes 2 seconds, but suddenly takes 45 seconds for just this one Operator.
+- **Why we care:** Sometimes this means bad internet. Worse, it means a "Man in the Middle" pirate has grabbed the message, copied it, and then pushed it forward very slowly. 
+
+**23. `auth_server_concentration_v1` (The Favorite Cashout Lane)**
+- **What it does:** If an Operator manages to route 99% of their traffic to just "Server A" and never hits "Server B" or "Server C".
+- **Why we care:** Hackers prefer finding one weak server and attacking it exclusively instead of randomizing. 
+
+**24. `auth_error_code_hotspot_v1` (The Broken Record)**
+- **What it does:** If an Operator produces the *exact same* weird error code for 80% of their work in an hour.
+- **Why we care:** Finding exact identical errors repeating means a script is stuck in a loop, getting blocked the exact same way permanently.
