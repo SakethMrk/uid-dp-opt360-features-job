@@ -24,6 +24,7 @@ public class FeatureAuthFailureRate extends KeyedProcessFunction<String, InputMe
         public int failureCount = 0;
         public double lastEmittedThreshold = 0.0;
         public long lastTimestamp = 0;
+        public String lastProcessedEventId = "";
     }
 
     private transient ValueState<RateState> state;
@@ -43,6 +44,14 @@ public class FeatureAuthFailureRate extends KeyedProcessFunction<String, InputMe
         RateState currentState = state.value();
         if (currentState == null) currentState = new RateState();
 
+        String eventId = txn.getEventId();
+        if (eventId != null && !eventId.isEmpty()) {
+            if (eventId.equals(currentState.lastProcessedEventId)) {
+                return; // Duplicate event dedup guard
+            }
+            currentState.lastProcessedEventId = eventId;
+        }
+
         boolean isFailure = "N".equalsIgnoreCase(result);
         
         currentState.recentResults.addLast(isFailure);
@@ -53,7 +62,11 @@ public class FeatureAuthFailureRate extends KeyedProcessFunction<String, InputMe
             if (removed) currentState.failureCount--;
         }
 
-        currentState.lastTimestamp = ctx.timestamp() > 0 ? ctx.timestamp() : System.currentTimeMillis();
+        long currentTs = ctx.timestamp() > 0 ? ctx.timestamp() : System.currentTimeMillis();
+        if (currentTs <= currentState.lastTimestamp) {
+            currentTs = currentState.lastTimestamp + 1;
+        }
+        currentState.lastTimestamp = currentTs;
 
         if (currentState.recentResults.size() >= 20) { // arbitrary minimum sample size
             double currentRate = (double) currentState.failureCount / currentState.recentResults.size();

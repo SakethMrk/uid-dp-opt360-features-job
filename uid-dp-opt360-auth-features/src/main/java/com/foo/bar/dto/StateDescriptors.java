@@ -1,6 +1,7 @@
 package com.foo.bar.dto;
 
 import com.foo.bar.functions.*;
+import com.foo.bar.functions.bio.*;
 import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.time.Time;
@@ -126,6 +127,37 @@ public class StateDescriptors {
     );
     public static ValueStateDescriptor<FeatureAuthModalitySwitch.ModalityState> featureAuthModalitySwitchDescriptor = new ValueStateDescriptor<>(
             "featureAuthModalitySwitchDescriptor", TypeInformation.of(new TypeHint<FeatureAuthModalitySwitch.ModalityState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthGhostUptime.UptimeState> featureAuthGhostUptimeDescriptor = new ValueStateDescriptor<>(
+            "featureAuthGhostUptimeDescriptor", TypeInformation.of(new TypeHint<FeatureAuthGhostUptime.UptimeState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthCrossBorderVelocity.GeoVelocityState> featureAuthCrossBorderVelocityDescriptor = new ValueStateDescriptor<>(
+            "featureAuthCrossBorderVelocityDescriptor", TypeInformation.of(new TypeHint<FeatureAuthCrossBorderVelocity.GeoVelocityState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthConcurrentAuaBurst.ConcurrentAuaState> featureAuthConcurrentAuaBurstDescriptor = new ValueStateDescriptor<>(
+            "featureAuthConcurrentAuaBurstDescriptor", TypeInformation.of(new TypeHint<FeatureAuthConcurrentAuaBurst.ConcurrentAuaState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthBiometricReplay.ReplayState> featureAuthBiometricReplayDescriptor = new ValueStateDescriptor<>(
+            "featureAuthBiometricReplayDescriptor", TypeInformation.of(new TypeHint<FeatureAuthBiometricReplay.ReplayState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthHighRiskTimeWindow.HighRiskState> featureAuthHighRiskTimeWindowDescriptor = new ValueStateDescriptor<>(
+            "featureAuthHighRiskTimeWindowDescriptor", TypeInformation.of(new TypeHint<FeatureAuthHighRiskTimeWindow.HighRiskState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthFailureRecoverySpeed.RecoveryState> featureAuthFailureRecoverySpeedDescriptor = new ValueStateDescriptor<>(
+            "featureAuthFailureRecoverySpeedDescriptor", TypeInformation.of(new TypeHint<FeatureAuthFailureRecoverySpeed.RecoveryState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthRapidDeviceSwitch.RapidSwitchState> featureAuthRapidDeviceSwitchDescriptor = new ValueStateDescriptor<>(
+            "featureAuthRapidDeviceSwitchDescriptor", TypeInformation.of(new TypeHint<FeatureAuthRapidDeviceSwitch.RapidSwitchState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthMultiErrorSpray.SprayState> featureAuthMultiErrorSprayDescriptor = new ValueStateDescriptor<>(
+            "featureAuthMultiErrorSprayDescriptor", TypeInformation.of(new TypeHint<FeatureAuthMultiErrorSpray.SprayState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthNightSurge.SurgeState> featureAuthNightSurgeDescriptor = new ValueStateDescriptor<>(
+            "featureAuthNightSurgeDescriptor", TypeInformation.of(new TypeHint<FeatureAuthNightSurge.SurgeState>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthConsecutiveIdenticalEvents.IdenticalState> featureAuthConsecutiveIdenticalEventsDescriptor = new ValueStateDescriptor<>(
+            "featureAuthConsecutiveIdenticalEventsDescriptor", TypeInformation.of(new TypeHint<FeatureAuthConsecutiveIdenticalEvents.IdenticalState>() {})
+    );
     public static ValueStateDescriptor<FeatureBioMatchScoreTrend.ScoreState> featureBioMatchScoreTrendDescriptor = new ValueStateDescriptor<>(
             "featureBioMatchScoreTrendDescriptor", TypeInformation.of(new TypeHint<FeatureBioMatchScoreTrend.ScoreState>() {})
     );
@@ -138,6 +170,24 @@ public class StateDescriptors {
     public static ValueStateDescriptor<FeatureBioDeepPrintAnomaly.DeepPrintState> featureBioDeepPrintAnomalyDescriptor = new ValueStateDescriptor<>(
             "featureBioDeepPrintAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioDeepPrintAnomaly.DeepPrintState>() {})
     );
+
+    // --- NEW BIO FEATURES ---
+    public static ValueStateDescriptor<FeatureBioCaptureTimeSpoof.CaptureState> featureBioCaptureTimeSpoofDescriptor = new ValueStateDescriptor<>(
+            "featureBioCaptureTimeSpoofDescriptor", TypeInformation.of(new TypeHint<FeatureBioCaptureTimeSpoof.CaptureState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioLivenessDesync.DesyncState> featureBioLivenessDesyncDescriptor = new ValueStateDescriptor<>(
+            "featureBioLivenessDesyncDescriptor", TypeInformation.of(new TypeHint<FeatureBioLivenessDesync.DesyncState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioExactImageSizeReplay.ImageSizeState> featureBioExactImageSizeReplayDescriptor = new ValueStateDescriptor<>(
+            "featureBioExactImageSizeReplayDescriptor", TypeInformation.of(new TypeHint<FeatureBioExactImageSizeReplay.ImageSizeState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioUncannyValleyScorePattern.UncannyState> featureBioUncannyValleyScorePatternDescriptor = new ValueStateDescriptor<>(
+            "featureBioUncannyValleyScorePatternDescriptor", TypeInformation.of(new TypeHint<FeatureBioUncannyValleyScorePattern.UncannyState>() {})
+    );
+    public static ValueStateDescriptor<FeatureBioDeepPrintSubversion.DeepPrintState> featureBioDeepPrintSubversionDescriptor = new ValueStateDescriptor<>(
+            "featureBioDeepPrintSubversionDescriptor", TypeInformation.of(new TypeHint<FeatureBioDeepPrintSubversion.DeepPrintState>() {})
+    );
+
     public static ValueStateDescriptor<FeatureBioFaceLivenessScoreDecline.FaceScoreState> featureBioFaceLivenessScoreDeclineDescriptor = new ValueStateDescriptor<>(
             "featureBioFaceLivenessScoreDeclineDescriptor", TypeInformation.of(new TypeHint<FeatureBioFaceLivenessScoreDecline.FaceScoreState>() {})
     );

@@ -30,6 +30,7 @@ public class FeatureLivenessStreakScore extends KeyedProcessFunction<String, Inp
         public String lastFailureAuthCode = "";
         public Set<String> deviceCodes = new LinkedHashSet<>();
         public String modelId = "";
+        public String lastProcessedEventId = "";
     }
     private transient ValueState<StreakState> State;
 
@@ -49,6 +50,20 @@ public class FeatureLivenessStreakScore extends KeyedProcessFunction<String, Inp
         if(currentTimestamp < 0){
             currentTimestamp = System.currentTimeMillis();
         }
+
+        String eventId = inputMessageTxn.getEventId();
+        if (eventId != null && !eventId.isEmpty()) {
+            if (eventId.equals(currentState.lastProcessedEventId)) {
+                return; // Duplicate event dedup guard
+            }
+            currentState.lastProcessedEventId = eventId;
+        }
+
+        // Logical ordering guard for distinct events with identical timestamps
+        if (currentState.streakCount > 0 && currentTimestamp <= currentState.lastFailureTimestamp) {
+            currentTimestamp = currentState.lastFailureTimestamp + 1;
+        }
+
         String subErrorCode = inputMessageTxn.getSubErrorCode();
         String currentDeviceCode = inputMessageTxn.getDeviceCode();
         if(subErrorCode!=null && subErrorCode.contains("300-3")){

@@ -213,15 +213,62 @@ Below is the detailed explanation for every real-time feature we've built, ident
 
 ---
 
+### 33. FeatureAuthGhostUptime
+- **State Used:** `ValueState<UptimeState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator actively authenticates for 18+ hours strictly without taking a 30-minute break.
+
+### 34. FeatureAuthCrossBorderVelocity
+- **State Used:** `ValueState<GeoVelocityState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator authenticates from two distinctly different Geographical State Codes in under 2 hours.
+
+### 35. FeatureAuthConcurrentAuaBurst
+- **State Used:** `ValueState<ConcurrentAuaState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator transactions specifically targeting 3 or more distinct AUAs (Agencies) occur identically within the exact same millisecond.
+
+### 36. FeatureAuthBiometricReplay
+- **State Used:** `ValueState<ReplayState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator submits the exact identical biometric envelope hash (fmr/fir/scores/pid) consecutively 3+ times.
+
+### 37. FeatureAuthHighRiskTimeWindow
+- **State Used:** `ValueState<HighRiskState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator registers 5 or more distinct authentication failures strictly between the hours of 1 AM and 4 AM IST.
+
+### 38. FeatureAuthFailureRecoverySpeed
+- **State Used:** `ValueState<RecoveryState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator registers 5+ back-to-back failures, and subsequently logs a successful authentication under 1000 milliseconds from the final failure.
+
+### 39. FeatureAuthRapidDeviceSwitch
+- **State Used:** `ValueState<RapidSwitchState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator physically cycles across 4 or more distinct hardware `deviceCode` identities inside a 10-minute sliding window.
+
+### 40. FeatureAuthMultiErrorSpray
+- **State Used:** `ValueState<SprayState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** Operator organically triggers exactly 8 or more entirely distinct `subErrorCode` subsets within a 1-hour tumbling window.
+
+### 41. FeatureAuthNightSurge
+- **State Used:** `ValueState<SurgeState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** More than 40% of the operator's rolling recent subset of 200+ requests occurs solely between the hours of 11 PM and 5 AM.
+
+### 42. FeatureAuthConsecutiveIdenticalEvents
+- **State Used:** `ValueState<IdenticalState>`
+- **Watermark Assignment:** `WatermarkStrategies.getWatermarkStrategy()` -> Extracted via `txn.getReqDateTime()`.
+- **Output Condition:** A literal unmodified exact payload clone across all signature properties recurs successively 3 or more times.
+
+---
+
 ## 💡 Ideas for Future New Features!
 
 While the Operator 360 profile is currently incredibly robust, the Flink pipeline scaling allows for unlimited real-time analytical power. Here are 5 new ideas that can be implemented next:
 
-**1. Ghost Machine Uptime Detection**
-- **Goal**: Identify non-human endurance schedules.
-- **Use Case**: An operator has been actively authenticating at least once every 10 minutes for 18 hours straight without a break.
-- **Result**: Emits an alert tracking the moving continuous window of activity.
-- **Impact**: Instantly discovers shared credential misuse (Day/Night shifts logging under the same ID) or botting routines.
 
 **2. Cross-Border Velocity Travel Anomaly**
 - **Goal**: Measure impossible geographical movement speed.

@@ -1,4 +1,4 @@
-package com.foo.bar.functions;
+package com.foo.bar.functions.bio;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foo.bar.dto.InputMessageBio;

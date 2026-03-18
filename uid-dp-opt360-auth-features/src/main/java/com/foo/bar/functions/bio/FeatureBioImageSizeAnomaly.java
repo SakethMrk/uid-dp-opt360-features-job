@@ -1,4 +1,4 @@
-package com.foo.bar.functions;
+package com.foo.bar.functions.bio;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foo.bar.dto.InputMessageBio;
@@ -12,52 +12,49 @@ import org.apache.flink.util.Collector;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class FeatureBioResponseTimeAnomaly extends KeyedProcessFunction<String, InputMessageBio, OutMessage> {
+public class FeatureBioImageSizeAnomaly extends KeyedProcessFunction<String, InputMessageBio, OutMessage> {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final double Z_SCORE_THRESHOLD = 3.0;
 
-    public static class TimeState {
+    public static class SizeState {
         public long count = 0;
         public double mean = 0.0;
         public double m2 = 0.0;
         public long lastTimestamp = 0;
     }
 
-    private transient ValueState<TimeState> state;
+    private transient ValueState<SizeState> state;
 
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
-        StateDescriptors.featureBioResponseTimeAnomalyDescriptor.enableTimeToLive(StateDescriptors.stateTtlFunction());
-        state = getRuntimeContext().getState(StateDescriptors.featureBioResponseTimeAnomalyDescriptor);
+        StateDescriptors.featureBioImageSizeAnomalyDescriptor.enableTimeToLive(StateDescriptors.stateTtlFunction());
+        state = getRuntimeContext().getState(StateDescriptors.featureBioImageSizeAnomalyDescriptor);
     }
 
     @Override
     public void processElement(InputMessageBio bio, Context ctx, Collector<OutMessage> out) throws Exception {
-        String startStr = bio.getLivenessRequestInitiatedTime();
-        String endStr = bio.getLivenessResponseReceivedTime();
-        if (startStr == null || endStr == null) return;
+        String sizeStr = bio.getImageSize();
+        if (sizeStr == null || sizeStr.trim().isEmpty() || "null".equalsIgnoreCase(sizeStr)) return;
 
-        double responseTime;
+        double imageSize;
         try {
-            long startTime = Long.parseLong(startStr.trim());
-            long endTime = Long.parseLong(endStr.trim());
-            responseTime = endTime - startTime; // duration in ms
+            imageSize = Double.parseDouble(sizeStr.trim());
         } catch (NumberFormatException e) {
             return;
         }
 
-        if (responseTime <= 0) return;
+        if (imageSize <= 0) return;
 
-        TimeState currentState = state.value();
-        if (currentState == null) currentState = new TimeState();
+        SizeState currentState = state.value();
+        if (currentState == null) currentState = new SizeState();
 
         // Welford's online algorithm
         currentState.count++;
-        double delta = responseTime - currentState.mean;
+        double delta = imageSize - currentState.mean;
         currentState.mean += delta / currentState.count;
-        double delta2 = responseTime - currentState.mean;
+        double delta2 = imageSize - currentState.mean;
         currentState.m2 += delta * delta2;
 
         currentState.lastTimestamp = ctx.timestamp() > 0 ? ctx.timestamp() : System.currentTimeMillis();
@@ -67,9 +64,9 @@ public class FeatureBioResponseTimeAnomaly extends KeyedProcessFunction<String, 
             double stddev = Math.sqrt(variance);
 
             if (stddev > 0) {
-                double zScore = Math.abs(responseTime - currentState.mean) / stddev;
+                double zScore = Math.abs(imageSize - currentState.mean) / stddev;
                 if (zScore > Z_SCORE_THRESHOLD) {
-                    emitFeature(ctx.getCurrentKey(), zScore, responseTime, currentState, out);
+                    emitFeature(ctx.getCurrentKey(), zScore, imageSize, currentState, out);
                 }
             }
         }
@@ -77,10 +74,10 @@ public class FeatureBioResponseTimeAnomaly extends KeyedProcessFunction<String, 
         state.update(currentState);
     }
 
-    private void emitFeature(String key, double zScore, double currentResponse, TimeState state, Collector<OutMessage> out) {
+    private void emitFeature(String key, double zScore, double currentSize, SizeState state, Collector<OutMessage> out) {
         OutMessage feature = new OutMessage();
         feature.setOptId(key);
-        feature.setFeature("bio_response_time_anomaly_v1");
+        feature.setFeature("bio_image_size_anomaly_v1");
         feature.setFeatureType("Z-Score");
         feature.setFeatureValue(zScore);
         feature.setWindowEnd(state.lastTimestamp);
@@ -88,8 +85,8 @@ public class FeatureBioResponseTimeAnomaly extends KeyedProcessFunction<String, 
 
         Map<String, Object> comments = new LinkedHashMap<>();
         comments.put("z_score", zScore);
-        comments.put("response_time_ms", currentResponse);
-        comments.put("mean_ms", state.mean);
+        comments.put("image_size", currentSize);
+        comments.put("mean", state.mean);
         comments.put("stddev", Math.sqrt(state.m2 / (state.count > 1 ? state.count - 1 : 1)));
         comments.put("event_count", state.count);
 

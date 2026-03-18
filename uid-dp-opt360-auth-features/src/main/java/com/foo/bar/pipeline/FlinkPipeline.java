@@ -3,7 +3,8 @@ package com.foo.bar.pipeline;
 import  com.foo.bar.dto.InputMessageBio;
 import com.foo.bar.dto.OutMessage;
 import com.foo.bar.functions.*;
-import com.foo.bar.mapper.CommentsMapper;
+import com.foo.bar.functions.bio.*;
+import com.foo.bar.mapper.FunctionMapTxn;
 import com.foo.bar.mapper.RowMapper;
 import com.foo.bar.mapper.RowMapperDevice;
 import lombok.extern.slf4j.Slf4j;
@@ -129,16 +130,33 @@ public class FlinkPipeline {
         DataStream<OutMessage> fAuthErrHotspot = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthErrorCodeHotspot());
         DataStream<OutMessage> fAuthModSwitch = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthModalitySwitch());
 
+        DataStream<OutMessage> fAuthGhostUp = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthGhostUptime());
+        DataStream<OutMessage> fAuthCrossVel = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthCrossBorderVelocity());
+        DataStream<OutMessage> fAuthConcAua = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthConcurrentAuaBurst());
+        DataStream<OutMessage> fAuthBioRep = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthBiometricReplay());
+        DataStream<OutMessage> fAuthHiRisk = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthHighRiskTimeWindow());
+        DataStream<OutMessage> fAuthFailRec = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFailureRecoverySpeed());
+        DataStream<OutMessage> fAuthRapDevSw = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthRapidDeviceSwitch());
+        DataStream<OutMessage> fAuthErrSpray = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthMultiErrorSpray());
+        DataStream<OutMessage> fAuthNightSrg = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthNightSurge());
+        DataStream<OutMessage> fAuthConsIdent = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthConsecutiveIdenticalEvents());
+
         // --- NEW BIO FEATURES STREAMS ---
         DataStream<OutMessage> fBioMatchTrend = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioMatchScoreTrend());
         DataStream<OutMessage> fBioLivFailStrk = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioLivenessFailureStreak());
         DataStream<OutMessage> fBioRespTimeAnom = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioResponseTimeAnomaly());
         DataStream<OutMessage> fBioDeepPrntAnom = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioDeepPrintAnomaly());
-        DataStream<OutMessage> fBioFaceScoDec = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioFaceLivenessScoreDecline());
-        DataStream<OutMessage> fBioModConcentr = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioModalityConcentration());
-        DataStream<OutMessage> fBioImgSizeAnom = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioImageSizeAnomaly());
-        DataStream<OutMessage> fBioPrbMinAnom = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioProbeMinutiaeAnomaly());
+        DataStream<OutMessage> fBioFaceDecline = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioFaceLivenessScoreDecline());
+        DataStream<OutMessage> fBioDeepAnom = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioDeepPrintAnomaly());
+        DataStream<OutMessage> fBioModConc = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioModalityConcentration());
 
+        DataStream<OutMessage> fBioCapTime = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioCaptureTimeSpoof());
+        DataStream<OutMessage> fBioLivDesync = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioLivenessDesync());
+        DataStream<OutMessage> fBioImgSize = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioExactImageSizeReplay());
+        DataStream<OutMessage> fBioUncanny = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioUncannyValleyScorePattern());
+        DataStream<OutMessage> fBioDeepSub = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioDeepPrintSubversion());
+
+        // Union feature streams
         DataStream<OutMessage> unionStream = countsStreamHr1
                 .union(gapStream1)
                 .union(retryStream1)
@@ -167,14 +185,28 @@ public class FlinkPipeline {
                 .union(fAuthCertExpiry)
                 .union(fAuthErrHotspot)
                 .union(fAuthModSwitch)
+                .union(fAuthGhostUp)
+                .union(fAuthCrossVel)
+                .union(fAuthConcAua)
+                .union(fAuthBioRep)
+                .union(fAuthHiRisk)
+                .union(fAuthFailRec)
+                .union(fAuthRapDevSw)
+                .union(fAuthErrSpray)
+                .union(fAuthNightSrg)
+                .union(fAuthConsIdent)
                 .union(fBioMatchTrend)
                 .union(fBioLivFailStrk)
                 .union(fBioRespTimeAnom)
                 .union(fBioDeepPrntAnom)
-                .union(fBioFaceScoDec)
-                .union(fBioModConcentr)
-                .union(fBioImgSizeAnom)
-                .union(fBioPrbMinAnom);
+                .union(fBioFaceDecline)
+                .union(fBioDeepAnom)
+                .union(fBioModConc)
+                .union(fBioCapTime)
+                .union(fBioLivDesync)
+                .union(fBioImgSize)
+                .union(fBioUncanny)
+                .union(fBioDeepSub);
 
         DataStream<OutMessage> enrichedStream = unionStream.map(new CommentsMapper());
         //DataStream<Row> rowStreamDevice = deviceChangeStream1.map(new RowMapperDevice());
