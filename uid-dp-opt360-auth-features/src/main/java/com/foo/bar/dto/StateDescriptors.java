@@ -197,7 +197,25 @@ public class StateDescriptors {
     public static ValueStateDescriptor<FeatureBioImageSizeAnomaly.SizeState> featureBioImageSizeAnomalyDescriptor = new ValueStateDescriptor<>(
             "featureBioImageSizeAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioImageSizeAnomaly.SizeState>() {})
     );
-    public static ValueStateDescriptor<FeatureBioProbeMinutiaeAnomaly.MinutiaeState> featureBioProbeMinutiaeAnomalyDescriptor = new ValueStateDescriptor<>(
-            "featureBioProbeMinutiaeAnomalyDescriptor", TypeInformation.of(new TypeHint<FeatureBioProbeMinutiaeAnomaly.MinutiaeState>() {})
+    public static org.apache.flink.api.common.state.MapStateDescriptor<Long, java.util.List<com.foo.bar.dto.InputMessageTxn>> featureAuthBruteForceCompromiseBufferDescriptor = new org.apache.flink.api.common.state.MapStateDescriptor<>(
+            "featureAuthBruteForceCompromiseBufferDescriptor",
+            org.apache.flink.api.common.typeinfo.BasicTypeInfo.LONG_TYPE_INFO,
+            org.apache.flink.api.common.typeinfo.TypeInformation.of(new org.apache.flink.api.common.typeinfo.TypeHint<java.util.List<com.foo.bar.dto.InputMessageTxn>>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthBruteForceCompromise.BruteForceState> featureAuthBruteForceCompromiseDescriptor = new ValueStateDescriptor<>(
+            "featureAuthBruteForceCompromiseDescriptor", TypeInformation.of(new TypeHint<FeatureAuthBruteForceCompromise.BruteForceState>() {})
+    );
+
+    public static org.apache.flink.api.common.state.MapStateDescriptor<Long, java.util.List<com.foo.bar.dto.InputMessageTxn>> featureAuthMultiDevBufferDescriptor = new org.apache.flink.api.common.state.MapStateDescriptor<>(
+            "featureAuthMultiDevBufferDescriptor",
+            org.apache.flink.api.common.typeinfo.BasicTypeInfo.LONG_TYPE_INFO,
+            org.apache.flink.api.common.typeinfo.TypeInformation.of(new org.apache.flink.api.common.typeinfo.TypeHint<java.util.List<com.foo.bar.dto.InputMessageTxn>>() {})
+    );
+    public static ValueStateDescriptor<FeatureAuthMultiDeviceConcurrency.ConcurrencyState> featureAuthMultiDeviceConcurrencyDescriptor = new ValueStateDescriptor<>(
+            "featureAuthMultiDeviceConcurrencyDescriptor", TypeInformation.of(new TypeHint<FeatureAuthMultiDeviceConcurrency.ConcurrencyState>() {})
+    );
+
+    public static ValueStateDescriptor<FeatureAuthFailureStreak.FailureState> featureAuthFailureStreakDescriptor = new ValueStateDescriptor<>(
+            "featureAuthFailureStreakDescriptor", TypeInformation.of(new TypeHint<FeatureAuthFailureStreak.FailureState>() {})
     );
 }

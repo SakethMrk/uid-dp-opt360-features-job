@@ -141,6 +141,11 @@ public class FlinkPipeline {
         DataStream<OutMessage> fAuthNightSrg = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthNightSurge());
         DataStream<OutMessage> fAuthConsIdent = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthConsecutiveIdenticalEvents());
 
+        // --- NEW FAULT-TOLERANT FEATURES ---
+        DataStream<OutMessage> fAuthFailStreak = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthFailureStreak());
+        DataStream<OutMessage> fAuthBruteForce = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthBruteForceCompromise());
+        DataStream<OutMessage> fAuthConcurrency = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthMultiDeviceConcurrency());
+
         // --- NEW BIO FEATURES STREAMS ---
         DataStream<OutMessage> fBioMatchTrend = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioMatchScoreTrend());
         DataStream<OutMessage> fBioLivFailStrk = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioLivenessFailureStreak());
@@ -195,6 +200,9 @@ public class FlinkPipeline {
                 .union(fAuthErrSpray)
                 .union(fAuthNightSrg)
                 .union(fAuthConsIdent)
+                .union(fAuthFailStreak)
+                .union(fAuthBruteForce)
+                .union(fAuthConcurrency)
                 .union(fBioMatchTrend)
                 .union(fBioLivFailStrk)
                 .union(fBioRespTimeAnom)
