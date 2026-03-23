@@ -146,6 +146,15 @@ public class FlinkPipeline {
         DataStream<OutMessage> fAuthBruteForce = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthBruteForceCompromise());
         DataStream<OutMessage> fAuthConcurrency = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new FeatureAuthMultiDeviceConcurrency());
 
+        // --- ADVANCED FEATURES (com.foo.bar.functions.advanced) ---
+        DataStream<OutMessage> fAdvDormancy = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthDormancyResurrection());
+        DataStream<OutMessage> fAdvVelocity = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthCredentialVelocityProfile());
+        DataStream<OutMessage> fAdvAuaDevCorr = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthAuaDeviceCorrelation());
+        DataStream<OutMessage> fAdvErrEscalation = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthProgressiveErrorEscalation());
+        DataStream<OutMessage> fAdvGeoAnchor = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthGeoLocationAnchor());
+        DataStream<OutMessage> fAdvSuccCliff = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthSuccessRatioCliff());
+        DataStream<OutMessage> fAdvFingerprint = inStream1.assignTimestampsAndWatermarks(WatermarkStrategies.getWatermarkStrategy()).keyBy(InputMessageTxn::getOptId).process(new com.foo.bar.functions.advanced.FeatureAuthSessionIdentityFingerprint());
+
         // --- NEW BIO FEATURES STREAMS ---
         DataStream<OutMessage> fBioMatchTrend = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioMatchScoreTrend());
         DataStream<OutMessage> fBioLivFailStrk = inStream2.assignTimestampsAndWatermarks(WatermarkStrategiesBio.getWatermarkStrategy()).keyBy(InputMessageBio::getOptId).process(new FeatureBioLivenessFailureStreak());
@@ -203,6 +212,14 @@ public class FlinkPipeline {
                 .union(fAuthFailStreak)
                 .union(fAuthBruteForce)
                 .union(fAuthConcurrency)
+                // ADVANCED FEATURES
+                .union(fAdvDormancy)
+                .union(fAdvVelocity)
+                .union(fAdvAuaDevCorr)
+                .union(fAdvErrEscalation)
+                .union(fAdvGeoAnchor)
+                .union(fAdvSuccCliff)
+                .union(fAdvFingerprint)
                 .union(fBioMatchTrend)
                 .union(fBioLivFailStrk)
                 .union(fBioRespTimeAnom)

@@ -218,4 +218,32 @@ public class StateDescriptors {
     public static ValueStateDescriptor<FeatureAuthFailureStreak.FailureState> featureAuthFailureStreakDescriptor = new ValueStateDescriptor<>(
             "featureAuthFailureStreakDescriptor", TypeInformation.of(new TypeHint<FeatureAuthFailureStreak.FailureState>() {})
     );
+
+    // ═══════════════════════════════════════════════════════════
+    // ADVANCED FEATURES STATE DESCRIPTORS
+    // (com.foo.bar.functions.advanced package)
+    // Note: These features also declare local descriptors in open()
+    //       for self-containment. These entries are for consistency.
+    // ═══════════════════════════════════════════════════════════
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthDormancyResurrection.DormancyState> featureAuthDormancyResurrectionDescriptor = new ValueStateDescriptor<>(
+            "featureAuthDormancyResurrectionState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthDormancyResurrection.DormancyState>() {})
+    );
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthCredentialVelocityProfile.VelocityProfileState> featureAuthCredentialVelocityProfileDescriptor = new ValueStateDescriptor<>(
+            "featureAuthCredentialVelocityProfileState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthCredentialVelocityProfile.VelocityProfileState>() {})
+    );
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthAuaDeviceCorrelation.CorrelationState> featureAuthAuaDeviceCorrelationDescriptor = new ValueStateDescriptor<>(
+            "featureAuthAuaDeviceCorrelationState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthAuaDeviceCorrelation.CorrelationState>() {})
+    );
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthProgressiveErrorEscalation.ProbingState> featureAuthProgressiveErrorEscalationDescriptor = new ValueStateDescriptor<>(
+            "featureAuthProgressiveErrorEscalationState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthProgressiveErrorEscalation.ProbingState>() {})
+    );
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthGeoLocationAnchor.AnchorState> featureAuthGeoLocationAnchorDescriptor = new ValueStateDescriptor<>(
+            "featureAuthGeoLocationAnchorState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthGeoLocationAnchor.AnchorState>() {})
+    );
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthSuccessRatioCliff.CliffState> featureAuthSuccessRatioCliffDescriptor = new ValueStateDescriptor<>(
+            "featureAuthSuccessRatioCliffState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthSuccessRatioCliff.CliffState>() {})
+    );
+    public static ValueStateDescriptor<com.foo.bar.functions.advanced.FeatureAuthSessionIdentityFingerprint.FingerprintState> featureAuthSessionIdentityFingerprintDescriptor = new ValueStateDescriptor<>(
+            "featureAuthSessionIdentityFingerprintState", TypeInformation.of(new TypeHint<com.foo.bar.functions.advanced.FeatureAuthSessionIdentityFingerprint.FingerprintState>() {})
+    );
 }
